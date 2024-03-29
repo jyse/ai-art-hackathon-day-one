@@ -1,0 +1,10 @@
+.app {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  margin-top: 50px;
+  justify-content: center;
+}

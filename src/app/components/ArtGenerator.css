@@ -1,0 +1,91 @@
+.generator {
+  padding: 15px;
+  border: 1px solid #a1a1a1;
+  border-radius: 3px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.promptContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.promptIntro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 20px;
+  color: var(--font-primary);
+}
+
+.promptIntro button {
+  background-color: transparent;
+  all: unset;
+}
+
+.promptIntro button:hover {
+  color: #ffffff;
+}
+
+.promptInput textarea {
+  width: 100%;
+  background-color: var(--background-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 4px;
+  min-height: 150px;
+  padding: 15px;
+  resize: none;
+  color: var(--font-primary);
+  font-size: 16px;
+}
+
+.promptInput textarea::placeholder {
+  font-size: 16px;
+  color: var(--font-secondary);
+}
+
+.promptInput textarea:focus {
+  outline: 1px solid var(--highlight-primary);
+}
+
+.promptInput button {
+  padding: 10px;
+  background-color: #fff;
+  border: none;
+  border-radius: 4px;
+  margin-top: 5px;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.promptInput button:hover {
+  background-color: var(--highlight-primary);
+}
+
+.buttonText {
+  font-size: 20px;
+  font-weight: 600;
+  color: black;
+}
+
+.intro h3 {
+  margin-top: 15px;
+  color: white;
+}
+
+.cubesGrid {
+  display: Grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.outputSection {
+  max-width: 550px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  color: white;
+  justify-content: center;
+}
