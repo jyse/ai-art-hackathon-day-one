@@ -1,9 +1,10 @@
 .generator {
-  padding: 15px;
   border: 1px solid #a1a1a1;
+  padding: 15px;
   border-radius: 3px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  /* gap: 20px; */
 }
 
 .promptContainer {
@@ -17,7 +18,7 @@
   justify-content: space-between;
   align-items: center;
   height: 20px;
-  color: var(--font-primary);
+  color: var(--font-secondary);
 }
 
 .promptIntro button {
@@ -26,7 +27,7 @@
 }
 
 .promptIntro button:hover {
-  color: #ffffff;
+  color: #fff;
 }
 
 .promptInput textarea {
@@ -67,18 +68,47 @@
 .buttonText {
   font-size: 20px;
   font-weight: 600;
-  color: black;
+  color: var(--font-tertiary);
 }
 
-.intro h3 {
+.intro {
   margin-top: 15px;
-  color: white;
 }
 
 .cubesGrid {
-  display: Grid;
+  display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
+}
+
+.styleCubeWrapper {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.styleCubeWrapper:hover .overlay {
+  visibility: visible;
+  opacity: 1;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6); /* Semi-transparent overlay */
+  color: #fff;
+  visibility: hidden;
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s, visibility 0.3s;
+  text-align: center;
 }
 
 .outputSection {
@@ -86,6 +116,10 @@
   text-align: center;
   display: flex;
   align-items: center;
-  color: white;
   justify-content: center;
+}
+
+.promptDescription {
+  text-align: center;
+  margin-top: 15px;
 }

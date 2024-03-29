@@ -1,11 +1,37 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./ArtGenerator.css";
 
+const makeRequest = async (url, method = "GET", body) => {
+  const response = await fetch(url, {
+    method,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  return response.json();
+};
+
 const ArtGenerator = () => {
-  const onSubmit = (e) => {
+  const [prompt, setPrompt] = useState("");
+
+  async function onSubmit(e) {
+    //catching the prompt
     e.preventDefault();
-  };
+    console.log("Your prompt is: ", prompt);
+    console.log("Your image is being generated...");
+
+    //sending prompt to AI
+    // 1. POST request that has prompt in body
+
+    try {
+      const result = await makeRequest("/api/image", "POST", { prompt });
+
+      // if result is successful, do this
+      // if not => goes to errow below
+    } catch (error) {
+      console.log("ERROR", error);
+    }
+  }
 
   const handleClearClick = () => {
     // clear the prompt
@@ -22,16 +48,17 @@ const ArtGenerator = () => {
             </button>
           </div>
           <form onSubmit={onSubmit}>
-            <div className="promptInput">
+            <div className={"promptInput"}>
               <textarea
                 className="input"
                 type="text"
                 placeholder="Describe the image you want to generate"
-                value=""
-                onChange={(e) => console.log(e.target.value)}
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
               />
+
               <button className="button" type="submit">
-                <div className="buttonText">Generate✨</div>
+                <div className={"buttonText"}>Generate✨</div>
               </button>
             </div>
           </form>
