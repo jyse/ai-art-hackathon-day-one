@@ -1,6 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import "./ArtGenerator.css";
+import Image from "next/image";
+
+const styleCube = {
+  borderRadius: "6px",
+  alignSelf: "center",
+  objectFit: "contain"
+};
 
 const makeRequest = async (url, method = "GET", body) => {
   const response = await fetch(url, {
@@ -13,21 +20,37 @@ const makeRequest = async (url, method = "GET", body) => {
 
 const ArtGenerator = () => {
   const [prompt, setPrompt] = useState("");
+  const [genImg, setGenImg] = useState(false);
+  const [getImgFp, setGenImgFP] = useState("");
+  const [finalPrompt, setFinalPrompt] = useState("");
+
+  const truncateItem = (text, maxLength = 10) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + "...";
+    }
+    return text;
+  };
 
   async function onSubmit(e) {
     //catching the prompt
     e.preventDefault();
     console.log("Your prompt is: ", prompt);
-    console.log("Your image is being generated...");
+    console.log("Your image is being 🤖generated...");
 
     //sending prompt to AI
     // 1. POST request that has prompt in body
 
     try {
+      console.log("🚀 Making request to /api/image");
       const result = await makeRequest("/api/image", "POST", { prompt });
 
-      // if result is successful, do this
-      // if not => goes to errow below
+      console.log(result, "what is in result 🔥🌻 ");
+      if (result.status) {
+        console.log("🎨🤖 Art is generated");
+        setGenImg(true);
+        setGenImgFP(result.imgFPs[result.imgFPs.length - 1]);
+        setFinalPrompt(prompt);
+      }
     } catch (error) {
       console.log("ERROR", error);
     }
@@ -83,7 +106,26 @@ const ArtGenerator = () => {
         </div>
       </div>
       <div className="outputSection">
-        <h1>Let's generate 🎨!</h1>
+        <div className="imgDetails">
+          {genImg ? (
+            <>
+              <Image
+                width={400}
+                height={400}
+                src={`/images/generatedImgs/${getImgFp}`}
+                style={styleCube}
+                alt={`/${getImgFp}`}
+              />
+              <div className={"promptDescription"}>
+                <p>{truncateItem(finalPrompt, 50)}</p>
+              </div>
+            </>
+          ) : (
+            <div className="start-generate">
+              <h1>Let's generate 🎨!</h1>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
