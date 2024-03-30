@@ -47,6 +47,7 @@ h3 {
 body {
   color: var(--font-primary);
   background-color: var(--background-primary);
+  color: rgb(227, 225, 225);
 }
 
 a {

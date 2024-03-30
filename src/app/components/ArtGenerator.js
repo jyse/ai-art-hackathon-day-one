@@ -22,10 +22,12 @@ const makeRequest = async (url, method = "GET", body) => {
 
 const ArtGenerator = () => {
   const [prompt, setPrompt] = useState("");
-  const [genImg, setGenImg] = useState(true);
-  const [getImgFp, setGenImgFP] = useState("1711828356145.png");
+  const [genImg, setGenImg] = useState(false);
+  const [getImgFp, setGenImgFP] = useState("");
   const [finalPrompt, setFinalPrompt] = useState("");
   const [randomSps, setRandomSps] = useState([]);
+  const [randomStyles, setRandomStyles] = useState([]);
+  const [chosenStyle, setChosenStyle] = useState("");
 
   const truncateItem = (text, maxLength = 10) => {
     if (text.length > maxLength) {
@@ -41,6 +43,29 @@ const ArtGenerator = () => {
       randomSps.push(spObjects[Math.floor(Math.random() * spObjects.length)]);
     }
     return randomSps;
+  };
+
+  const getRandomStyles = () => {
+    let random = styleNames.map((styleName) => {
+      let filtered = spObjects.filter((item) => item.style === styleName);
+      let randomSelectedStyles =
+        filtered[Math.floor(Math.random() * filtered.length)];
+      return randomSelectedStyles;
+    });
+    return random;
+  };
+
+  const handleStarterPrompt = (starterPrompt) => {
+    setPrompt(starterPrompt);
+  };
+
+  const handleStyleSelection = (style) => {
+    console.log("Chosen style: ", style);
+    setChosenStyle(style);
+
+    setPrompt((currentPrompt) =>
+      currentPrompt ? `${currentPrompt}, ${style}` : `${style},`
+    );
   };
 
   async function onSubmit(e) {
@@ -71,8 +96,11 @@ const ArtGenerator = () => {
 
   useEffect(() => {
     let spsResult = getRandomSp();
+    let stylesResult = getRandomStyles();
+
     console.log(spsResult, "what is in spsResulte? 🐲🐲🐲🐲🐲");
     setRandomSps(spsResult);
+    setRandomStyles(stylesResult);
   }, []);
 
   return (
@@ -106,7 +134,37 @@ const ArtGenerator = () => {
           <div className="cubesGrid">
             {randomSps?.map((item, index) => {
               return (
-                <div className="styleCubeWrapper">
+                <div
+                  className="styleCubeWrapper"
+                  key={index}
+                  onClick={() => handleStarterPrompt(item.prompt)}
+                >
+                  <Image
+                    width={120}
+                    height={120}
+                    borderRadius={3}
+                    src={item.imageFile}
+                    style={styleCube}
+                    alt={`${index}.png`}
+                  />
+                  <div className="overlay">
+                    <p>{truncateItem(item?.prompt, 25)}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="intro">
+            <h3>Choose a style</h3>
+          </div>
+          <div className="cubesGrid">
+            {randomStyles.map((item, index) => {
+              return (
+                <div
+                  className="styleCubeWrapper"
+                  key={index}
+                  onClick={() => handleStyleSelection(item.style)}
+                >
                   <Image
                     width={120}
                     height={120}
@@ -118,17 +176,6 @@ const ArtGenerator = () => {
                 </div>
               );
             })}
-
-            <h3>CUBE</h3>
-          </div>
-          <div className="intro">
-            <h3>Choose a style</h3>
-          </div>
-          <div className="cubesGrid">
-            <h3>StyleCube</h3>
-            <h3>StyleCube</h3>
-            <h3>StyleCube</h3>
-            <h3>StyleCube</h3>
           </div>
         </div>
       </div>
@@ -145,7 +192,7 @@ const ArtGenerator = () => {
                 alt={`/${getImgFp}`}
               />
               <div className={"promptDescription"}>
-                <p>{truncateItem(finalPrompt, 50)}</p>
+                <p>{truncateItem(finalPrompt, 25)}</p>
               </div>
             </>
           ) : (
