@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import "./ArtGenerator.css";
 import Image from "next/image";
+import spObjects from "../../../public/JSON/sps.json";
+import styleNames from "../../../public/JSON/styles.json";
 
 const styleCube = {
   borderRadius: "6px",
@@ -20,9 +22,10 @@ const makeRequest = async (url, method = "GET", body) => {
 
 const ArtGenerator = () => {
   const [prompt, setPrompt] = useState("");
-  const [genImg, setGenImg] = useState(false);
-  const [getImgFp, setGenImgFP] = useState("");
+  const [genImg, setGenImg] = useState(true);
+  const [getImgFp, setGenImgFP] = useState("1711828356145.png");
   const [finalPrompt, setFinalPrompt] = useState("");
+  const [randomSps, setRandomSps] = useState([]);
 
   const truncateItem = (text, maxLength = 10) => {
     if (text.length > maxLength) {
@@ -31,14 +34,20 @@ const ArtGenerator = () => {
     return text;
   };
 
+  const getRandomSp = () => {
+    let randomSps = [];
+
+    for (let i = 0; i < 4; i++) {
+      randomSps.push(spObjects[Math.floor(Math.random() * spObjects.length)]);
+    }
+    return randomSps;
+  };
+
   async function onSubmit(e) {
     //catching the prompt
     e.preventDefault();
     console.log("Your prompt is: ", prompt);
     console.log("Your image is being 🤖generated...");
-
-    //sending prompt to AI
-    // 1. POST request that has prompt in body
 
     try {
       console.log("🚀 Making request to /api/image");
@@ -59,6 +68,12 @@ const ArtGenerator = () => {
   const handleClearClick = () => {
     // clear the prompt
   };
+
+  useEffect(() => {
+    let spsResult = getRandomSp();
+    console.log(spsResult, "what is in spsResulte? 🐲🐲🐲🐲🐲");
+    setRandomSps(spsResult);
+  }, []);
 
   return (
     <div className={"generator"}>
@@ -89,9 +104,21 @@ const ArtGenerator = () => {
             <h3>Choose a starter prompt</h3>
           </div>
           <div className="cubesGrid">
-            <h3>CUBE</h3>
-            <h3>CUBE</h3>
-            <h3>CUBE</h3>
+            {randomSps?.map((item, index) => {
+              return (
+                <div className="styleCubeWrapper">
+                  <Image
+                    width={120}
+                    height={120}
+                    borderRadius={3}
+                    src={item.imageFile}
+                    style={styleCube}
+                    alt={`${index}.png`}
+                  />
+                </div>
+              );
+            })}
+
             <h3>CUBE</h3>
           </div>
           <div className="intro">
@@ -110,8 +137,9 @@ const ArtGenerator = () => {
           {genImg ? (
             <>
               <Image
-                width={400}
-                height={400}
+                priority={true}
+                height={250}
+                width={250}
                 src={`/images/generatedImgs/${getImgFp}`}
                 style={styleCube}
                 alt={`/${getImgFp}`}
